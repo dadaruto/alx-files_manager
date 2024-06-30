@@ -30,7 +30,7 @@ export const errorResponse = (err, req, res, next) => {
     error: err ? err.message || err.toString() : defaultMsg,
   });
 };/* eslint-disable no-unused-vars */
-import { Request as ExpressRequest, Response, NextFunction } from 'express';
+import { Request as ExpressRequest, Response as ExpressResponse, NextFunction } from 'express';
 
 /**
  *  * Represents an error in this API.
