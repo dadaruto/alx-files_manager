@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 import { promisify } from 'util';
 import { createClient } from 'redis';
+=======
+import { createClient } from 'redis';
+import { promisify } from 'util';
+>>>>>>> ec2ac9f5ae306f24a57eb498135d7a2d3c98ac15
 
 /**
  * Represents a Redis client.
  */
 class RedisClient {
+<<<<<<< HEAD
   /**
    * Creates a new RedisClient instance.
    */
@@ -60,4 +66,33 @@ class RedisClient {
 }
 
 export const redisClient = new RedisClient();
+=======
+    constructor() {
+        this.client = createClient();
+        this.client.on('error', (err) => console.log('Redis Client Error', err));
+        this.client.get = promisify(this.client.get);
+        this.client.set = promisify(this.client.set);
+        this.client.del = promisify(this.client.del);
+    }
+
+    isAlive() {
+        return this.client.connected;
+    }
+
+    async get(key) {
+        return this.client.get(key);
+    }
+
+    async set(key, value, duration) {
+        await this.client.set(key, value);
+        await this.client.expire(key, duration);
+    }
+
+    async del(key) {
+        return this.client.del(key);
+    }
+}
+
+const redisClient = new RedisClient();
+>>>>>>> ec2ac9f5ae306f24a57eb498135d7a2d3c98ac15
 export default redisClient;
