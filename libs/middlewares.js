@@ -1,11 +1,8 @@
-import express from 'express';
+import bodyParser from 'body-parser';
 
-/**
- * Adds middlewares to the given express application.
- * @param {express.Express} api The express application.
- */
-const injectMiddlewares = (api) => {
-  api.use(express.json({ limit: '200mb' }));
+const injectMiddlewares = (server) => {
+  server.use(bodyParser.json());
+  // Add other middlewares here
 };
 
 export default injectMiddlewares;
