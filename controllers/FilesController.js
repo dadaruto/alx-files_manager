@@ -300,4 +300,4 @@ export default class FilesController {
     res.setHeader('Content-Type', contentType(file.name) || 'text/plain; charset=utf-8');
     res.status(200).sendFile(absoluteFilePath);
   }
-}]
+}
