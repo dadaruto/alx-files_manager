@@ -1,28 +1,30 @@
-// main.js
-import express from 'express';
-import routes from './routes/index';
-import redisClient from './utils/redis';
 import dbClient from './utils/db';
 
-const app = express();
-const port = process.env.PORT || 5000;
+const waitConnection = () => {
+    return new Promise((resolve, reject) => {
+        let i = 0;
+        const repeatFct = async () => {
+            await setTimeout(() => {
+                i += 1;
+                if (i >= 10) {
+                    reject()
+                }
+                else if(!dbClient.isAlive()) {
+                    repeatFct()
+                }
+                else {
+                    resolve()
+                }
+            }, 1000);
+        };
+        repeatFct();
+    })
+};
 
-app.use(express.json());
-app.use('/', routes);
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-  console.log(redisClient.isAlive()); // Should log true if connected
-  redisClient.get('some_key').then((value) => console.log(value)); // Example key, should log the value or null if key doesn't exist
-
-  (async () => {
-    try {
-      console.log(redisClient.isAlive()); // Check if this logs 'true'
-      console.log(redisClient.get('some_key')); // Check the value or null	    
-      console.log(await dbClient.nbUsers()); // Should log the number of users
-      console.log(await dbClient.nbFiles()); // Should log the number of files
-    } catch (err) {
-      console.error(err);
-    }
-  })();
-});
+(async () => {
+    console.log(dbClient.isAlive());
+    await waitConnection();
+    console.log(dbClient.isAlive());
+    console.log(await dbClient.nbUsers());
+    console.log(await dbClient.nbFiles());
+})();
