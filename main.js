@@ -17,6 +17,8 @@ app.listen(port, () => {
 
   (async () => {
     try {
+      console.log(redisClient.isAlive()); // Check if this logs 'true'
+      console.log(redisClient.get('some_key')); // Check the value or null	    
       console.log(await dbClient.nbUsers()); // Should log the number of users
       console.log(await dbClient.nbFiles()); // Should log the number of files
     } catch (err) {
