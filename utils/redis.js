@@ -23,15 +23,16 @@ class RedisClient {
   }
 
   async get(key) {
-    return await this.getAsync(key);
+    return this.getAsync(key);
   }
 
   async set(key, value, duration) {
-    await this.setAsync(key, value, 'EX', duration);
+    await this.setAsync(key, value);
+    this.client.expire(key, duration);
   }
 
   async del(key) {
-    await this.delAsync(key);
+    return this.delAsync(key);
   }
 }
 
